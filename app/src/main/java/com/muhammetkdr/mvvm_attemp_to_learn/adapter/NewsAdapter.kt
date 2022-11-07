@@ -23,15 +23,9 @@ class NewsAdapter() : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
             return oldItem == newItem
         }
     }
-
     val differ = AsyncListDiffer(this,differCallBack)
 
-
     inner class NewsViewHolder(val newsBinding : NewsOrderBinding): ViewHolder(newsBinding.root){
-
-        fun bind(news: NewsResponse){
-
-        }
 
     }
 
@@ -41,7 +35,6 @@ class NewsAdapter() : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-//        holder.bind()
         val article = differ.currentList[position]
         holder.itemView.apply {
             Glide.with(this).load(article.urlToImage).into(holder.newsBinding.ivArticleImage)
@@ -52,8 +45,7 @@ class NewsAdapter() : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
             setOnClickListener{
                 onItemClickListener?.let {
                     it(article)
-                    Toast.makeText(holder.itemView.context,"clicked! : ${article}",Toast.LENGTH_LONG).show()
-                 }
+                }
             }
         }
     }
