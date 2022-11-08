@@ -47,13 +47,12 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         val breakingNewsViewModelFactory = BreakingNewsViewModelFactory(newsRepository)
         breakingNewsViewModel = ViewModelProvider(this,breakingNewsViewModelFactory)[BreakingNewsViewModel::class.java]
 
-
         breakingNewsViewModel.breakingNews.observe(viewLifecycleOwner){ response->
            when(response){
                is Resource.Success -> {
                    hideProgressBar()
                    response.data?.let { newsResponse ->
-                       newsAdapter.differ.submitList(newsResponse.articles)
+                       newsAdapter.differ.submitList(newsResponse.articles.toList())
                    }
                }
                is Resource.Error -> {
@@ -88,6 +87,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             layoutManager = LinearLayoutManager(activity)
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
