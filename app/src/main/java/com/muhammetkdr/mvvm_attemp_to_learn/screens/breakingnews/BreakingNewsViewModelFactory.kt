@@ -6,12 +6,11 @@ import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
 
 class BreakingNewsViewModelFactory(private val newsRepository: NewsRepository) : ViewModelProvider.Factory {
 
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if(modelClass.isAssignableFrom(BreakingNewsViewModel::class.java)){
-//            return BreakingNewsViewModel(newsRepository) as T
-//        }else{
-//            throw IllegalStateException("Can not create instance of this viewModel")
-//        }
-//    }
-
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if(modelClass.isAssignableFrom(BreakingNewsViewModel::class.java)){
+            return BreakingNewsViewModel(newsRepository) as T
+        }else{
+            throw IllegalStateException("Can not create instance of this viewModel")
+        }
+    }
 }

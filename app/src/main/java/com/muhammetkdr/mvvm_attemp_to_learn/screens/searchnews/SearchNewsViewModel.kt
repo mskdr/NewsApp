@@ -1,4 +1,4 @@
-package com.muhammetkdr.mvvm_attemp_to_learn.screens.breakingnews
+package com.muhammetkdr.mvvm_attemp_to_learn.screens.searchnews
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,33 +6,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammetkdr.mvvm_attemp_to_learn.models.NewsResponse
 import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
+import com.muhammetkdr.mvvm_attemp_to_learn.roomdb.ArticleDatabase
 import com.muhammetkdr.mvvm_attemp_to_learn.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class BreakingNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
+class SearchNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
 
-//    val newsRepository = NewsRepository()
-
-    private val _breakingNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val breakingNews : LiveData<Resource<NewsResponse>> get() = _breakingNews
-    private var breakingNewsPage = 1
+    private val _searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    val searchNews : LiveData<Resource<NewsResponse>> get() = _searchNews
+    private val searchNewsPage = 1
 
     private val _isLoading : MutableLiveData<Boolean> = MutableLiveData()
     val isLoading : LiveData<Boolean> get() = _isLoading
 
-    init {
-        getBreakingNews("us")
+    fun searchNews(searchQuery: String) = viewModelScope.launch(Dispatchers.IO) {
+        _searchNews.postValue(Resource.Loading())
+        val response = newsRepository.searchNews(searchQuery,searchNewsPage)
+        _searchNews.postValue(handleSearchNewsResponse(response))
     }
 
-    fun getBreakingNews(countryCode : String) = viewModelScope.launch(Dispatchers.IO) {
-        _breakingNews.postValue(Resource.Loading())
-        val response = newsRepository.getBreakingNews(countryCode,breakingNewsPage)
-        _breakingNews.postValue(handleBreakingNewsResponse(response))
-    }
-                                        // response = cevap / karşılık
-    private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse>{
+    private fun handleSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>? {
         if(response.isSuccessful){
             response.body()?.let { resultResponse->
                 return Resource.Success(resultResponse)
@@ -48,5 +43,6 @@ class BreakingNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
     fun setLoadingDataTrue(){
         _isLoading.value = true
     }
+
 
 }
