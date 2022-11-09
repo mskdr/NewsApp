@@ -1,5 +1,6 @@
 package com.muhammetkdr.mvvm_attemp_to_learn.screens.breakingnews
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,7 +46,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         }
 
         val newsRepository = NewsRepository(ArticleDatabase(requireContext()))
-        val breakingNewsViewModelFactory = BreakingNewsViewModelFactory(newsRepository)
+        val breakingNewsViewModelFactory = BreakingNewsViewModelFactory(requireActivity().application,newsRepository)
         breakingNewsViewModel = ViewModelProvider(this,breakingNewsViewModelFactory)[BreakingNewsViewModel::class.java]
 
         breakingNewsViewModel.breakingNews.observe(viewLifecycleOwner){ response->
@@ -65,6 +66,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                    hideProgressBar()
                    response.message?.let { message ->
                        Log.e(TAG,"An error occured :  $message")
+                       Toast.makeText(activity,"An error occured: $message",Toast.LENGTH_LONG).show()
                    }
                }
                is Resource.Loading -> {
@@ -75,13 +77,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     }
     private fun hideProgressBar() {
         binding.paginationProgressBar.visibility = View.INVISIBLE
-        breakingNewsViewModel.setLoadingDataFalse()
+//        breakingNewsViewModel.setLoadingDataFalse()
         isLoading = false
     }
 
     private fun showProgressBar() {
         binding.paginationProgressBar.visibility = View.VISIBLE
-        breakingNewsViewModel.setLoadingDataTrue()
+//        breakingNewsViewModel.setLoadingDataTrue()
         isLoading = true
     }
 

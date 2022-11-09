@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -64,7 +65,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
         }
 
         val newsRepository = NewsRepository(ArticleDatabase(requireContext()))
-        val searchNewsViewModelFactory = SearchNewsViewModelFactory(newsRepository)
+        val searchNewsViewModelFactory = SearchNewsViewModelFactory(requireActivity().application,newsRepository)
         searchNewsViewModel = ViewModelProvider(this,searchNewsViewModelFactory)[SearchNewsViewModel::class.java]
 
         searchNewsViewModel.searchNews.observe(viewLifecycleOwner){ response->
@@ -84,6 +85,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                     hideProgressBar()
                     response.message?.let { message ->
                         Log.e(TAG,"An error occured :  $message")
+                        Toast.makeText(activity,"An error occured: $message", Toast.LENGTH_LONG).show()
                     }
                 }
                 is Resource.Loading -> {
@@ -92,7 +94,6 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
             }
         }
     }
-
 
     private fun hideProgressBar() {
         binding.paginationProgressBar.visibility = View.INVISIBLE
