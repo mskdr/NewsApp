@@ -11,7 +11,7 @@ class SearchNewsViewModelFactory (private val searchNewsRepository: NewsReposito
         if(modelClass.isAssignableFrom(SearchNewsViewModel::class.java)){
             return SearchNewsViewModel(searchNewsRepository) as T
         }else{
-            throw IllegalStateException("Can not create instance of this viewModel")
+            throw IllegalStateException("Can not create instance of searchViewModel")
         }
     }
 }

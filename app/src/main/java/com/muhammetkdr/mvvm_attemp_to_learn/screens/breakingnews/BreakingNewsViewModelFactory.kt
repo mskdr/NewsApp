@@ -10,7 +10,7 @@ class BreakingNewsViewModelFactory(private val newsRepository: NewsRepository) :
         if(modelClass.isAssignableFrom(BreakingNewsViewModel::class.java)){
             return BreakingNewsViewModel(newsRepository) as T
         }else{
-            throw IllegalStateException("Can not create instance of this viewModel")
+            throw IllegalStateException("Can not create instance of breakingNewsViewModel")
         }
     }
 }

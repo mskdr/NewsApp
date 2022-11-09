@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammetkdr.mvvm_attemp_to_learn.models.NewsResponse
 import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
-import com.muhammetkdr.mvvm_attemp_to_learn.roomdb.ArticleDatabase
 import com.muhammetkdr.mvvm_attemp_to_learn.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +15,8 @@ class SearchNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
 
     private val _searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     val searchNews : LiveData<Resource<NewsResponse>> get() = _searchNews
-    private val searchNewsPage = 1
+    var searchNewsPage = 1
+    private var searchNewsResponse: NewsResponse? = null
 
     private val _isLoading : MutableLiveData<Boolean> = MutableLiveData()
     val isLoading : LiveData<Boolean> get() = _isLoading
@@ -30,7 +30,15 @@ class SearchNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
     private fun handleSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>? {
         if(response.isSuccessful){
             response.body()?.let { resultResponse->
-                return Resource.Success(resultResponse)
+                searchNewsPage++
+                if(searchNewsResponse == null){
+                    searchNewsResponse = resultResponse
+                }else{
+                    val olduArticles = searchNewsResponse?.articles
+                    val newsArticles = resultResponse.articles
+                    olduArticles?.addAll(newsArticles)
+                }
+                return Resource.Success(searchNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())

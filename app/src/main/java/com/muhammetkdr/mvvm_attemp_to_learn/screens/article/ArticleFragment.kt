@@ -21,9 +21,6 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var articleViewModel : ArticleViewModel
-    private lateinit var newsAdapter: NewsAdapter
-
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentArticleBinding.inflate(layoutInflater, container, false)

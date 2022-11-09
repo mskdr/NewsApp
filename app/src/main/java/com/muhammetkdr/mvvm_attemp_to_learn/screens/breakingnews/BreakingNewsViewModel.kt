@@ -16,7 +16,8 @@ class BreakingNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
 
     private val _breakingNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     val breakingNews : LiveData<Resource<NewsResponse>> get() = _breakingNews
-    private var breakingNewsPage = 1
+    var breakingNewsPage = 1
+    private var breakingNewsResponse: NewsResponse? = null
 
     private val _isLoading : MutableLiveData<Boolean> = MutableLiveData()
     val isLoading : LiveData<Boolean> get() = _isLoading
@@ -34,11 +35,21 @@ class BreakingNewsViewModel(val newsRepository: NewsRepository) : ViewModel() {
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse>{
         if(response.isSuccessful){
             response.body()?.let { resultResponse->
-                return Resource.Success(resultResponse)
+                breakingNewsPage++
+                if(breakingNewsResponse == null){
+                    breakingNewsResponse = resultResponse
+                }else{
+                 val olduArticles = breakingNewsResponse?.articles
+                 val newsArticles = resultResponse.articles
+                    olduArticles?.addAll(newsArticles)
+                }
+                return Resource.Success(breakingNewsResponse ?: resultResponse)
             }
         }
         return Resource.Error(response.message())
     }
+
+
 
     fun setLoadingDataFalse(){
         _isLoading.value = false
