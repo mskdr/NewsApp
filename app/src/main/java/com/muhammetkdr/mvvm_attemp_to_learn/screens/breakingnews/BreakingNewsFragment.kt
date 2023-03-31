@@ -1,6 +1,6 @@
 package com.muhammetkdr.mvvm_attemp_to_learn.screens.breakingnews
 
-import android.app.Application
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.muhammetkdr.mvvm_attemp_to_learn.R

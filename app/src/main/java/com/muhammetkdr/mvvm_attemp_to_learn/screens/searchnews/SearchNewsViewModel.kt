@@ -8,7 +8,6 @@ import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammetkdr.mvvm_attemp_to_learn.models.NewsResponse
 import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
@@ -35,6 +34,7 @@ class SearchNewsViewModel(app:Application, val newsRepository: NewsRepository) :
 //        val response = newsRepository.searchNews(searchQuery,searchNewsPage)
 //        _searchNews.postValue(handleSearchNewsResponse(response))
     }
+
 
     private fun handleSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>? {
         if(response.isSuccessful){

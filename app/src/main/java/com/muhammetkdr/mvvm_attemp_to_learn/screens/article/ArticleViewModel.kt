@@ -1,7 +1,5 @@
 package com.muhammetkdr.mvvm_attemp_to_learn.screens.article
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammetkdr.mvvm_attemp_to_learn.models.Article
@@ -17,6 +15,10 @@ class ArticleViewModel(private val newsRepository: NewsRepository) : ViewModel()
 
     init {
         getSavedNews()
+    }
+
+    fun deleteArticle(article: Article) = viewModelScope.launch(Dispatchers.IO) {
+        newsRepository.deleteArticle(article)
     }
 
     fun getSavedNews() = newsRepository.getSavedNews()

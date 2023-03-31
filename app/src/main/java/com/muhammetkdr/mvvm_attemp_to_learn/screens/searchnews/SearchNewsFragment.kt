@@ -11,7 +11,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.muhammetkdr.mvvm_attemp_to_learn.R
@@ -19,7 +18,6 @@ import com.muhammetkdr.mvvm_attemp_to_learn.adapter.NewsAdapter
 import com.muhammetkdr.mvvm_attemp_to_learn.databinding.FragmentSearchNewsBinding
 import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
 import com.muhammetkdr.mvvm_attemp_to_learn.roomdb.ArticleDatabase
-import com.muhammetkdr.mvvm_attemp_to_learn.screens.breakingnews.BreakingNewsViewModelFactory
 import com.muhammetkdr.mvvm_attemp_to_learn.utils.Constants
 import com.muhammetkdr.mvvm_attemp_to_learn.utils.Constants.Companion.SEARCH_NEWS_TIME_DELAY
 import com.muhammetkdr.mvvm_attemp_to_learn.utils.Resource
@@ -59,14 +57,15 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
             }
         }
 
+        val newsRepository = NewsRepository(ArticleDatabase(requireContext()))
+        val searchNewsViewModelFactory = SearchNewsViewModelFactory(requireActivity().application,newsRepository)
+        searchNewsViewModel = ViewModelProvider(this,searchNewsViewModelFactory)[SearchNewsViewModel::class.java]
+
+
         newsAdapter.setOnItemClickListener { article->
             val action = SearchNewsFragmentDirections.actionSearchNewsFragment2ToArticleFragment(article)
             Navigation.findNavController(view).navigate(action)
         }
-
-        val newsRepository = NewsRepository(ArticleDatabase(requireContext()))
-        val searchNewsViewModelFactory = SearchNewsViewModelFactory(requireActivity().application,newsRepository)
-        searchNewsViewModel = ViewModelProvider(this,searchNewsViewModelFactory)[SearchNewsViewModel::class.java]
 
         searchNewsViewModel.searchNews.observe(viewLifecycleOwner){ response->
             when(response){

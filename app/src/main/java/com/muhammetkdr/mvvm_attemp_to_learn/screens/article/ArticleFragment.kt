@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.muhammetkdr.mvvm_attemp_to_learn.R
-import com.muhammetkdr.mvvm_attemp_to_learn.adapter.NewsAdapter
 import com.muhammetkdr.mvvm_attemp_to_learn.databinding.FragmentArticleBinding
 import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
 import com.muhammetkdr.mvvm_attemp_to_learn.roomdb.ArticleDatabase
@@ -17,8 +16,6 @@ import com.muhammetkdr.mvvm_attemp_to_learn.roomdb.ArticleDatabase
 
 class ArticleFragment : Fragment(R.layout.fragment_article) {
     private var _binding: FragmentArticleBinding? = null
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var articleViewModel : ArticleViewModel
 
@@ -55,7 +52,13 @@ class ArticleFragment : Fragment(R.layout.fragment_article) {
 
                 binding.fab.setOnClickListener{
                     articleViewModel.saveArticle(args.article)
-                    Snackbar.make(view,"Article saved succesfully",Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(view,"Article saved succesfully",Snackbar.LENGTH_LONG).apply {
+                        setAction("undo"){
+                            articleViewModel.deleteArticle(args.article)
+                            binding.fab.visibility = View.VISIBLE
+                        }
+                    }
+                        .show()
                 }
             }
         }

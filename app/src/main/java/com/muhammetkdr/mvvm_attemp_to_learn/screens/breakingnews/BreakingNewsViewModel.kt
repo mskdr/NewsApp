@@ -1,6 +1,5 @@
 package com.muhammetkdr.mvvm_attemp_to_learn.screens.breakingnews
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
@@ -10,7 +9,6 @@ import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muhammetkdr.mvvm_attemp_to_learn.models.NewsResponse
 import com.muhammetkdr.mvvm_attemp_to_learn.repository.NewsRepository
@@ -22,7 +20,6 @@ import retrofit2.Response
 import java.io.IOException
 
 class BreakingNewsViewModel(app: Application, val newsRepository: NewsRepository) : AndroidViewModel(app) {
-
 
     private val _breakingNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     val breakingNews : LiveData<Resource<NewsResponse>> get() = _breakingNews
@@ -50,9 +47,9 @@ class BreakingNewsViewModel(app: Application, val newsRepository: NewsRepository
                 if(breakingNewsResponse == null){
                     breakingNewsResponse = resultResponse
                 }else{
-                 val olduArticles = breakingNewsResponse?.articles
+                 val oldArticles = breakingNewsResponse?.articles
                  val newsArticles = resultResponse.articles
-                    olduArticles?.addAll(newsArticles)
+                    oldArticles?.addAll(newsArticles)
                 }
                 return Resource.Success(breakingNewsResponse ?: resultResponse)
             }
